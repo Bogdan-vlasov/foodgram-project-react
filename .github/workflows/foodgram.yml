@@ -67,7 +67,7 @@ jobs:
           script: |
             sudo docker-compose stop
             sudo docker-compose rm web
-            sudo docker pull sprngtm4htlr/backend:v1.0
+            sudo docker pull sprngtm4htlr/foodgram:v1.0
             sudo docker pull sprngtm4htlr/frontend:v1.0
             touch .env
             echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
