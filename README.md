@@ -1,5 +1,5 @@
 # Проект Foodgram
-![Foodgram workflow](https://github.com/Bogdan-vlasov/foodgram-project-react/actions/workflows/foodgram.yml/badge.svg&branch=master)  
+![Foodgram workflow](https://github.com/Bogdan-vlasov/foodgram-project-react/actions/workflows/foodgram.yml/badge.svg?branch=master)  
   
 [![Python](https://img.shields.io/badge/-Python-464646?style=flat-square&logo=Python)](https://www.python.org/)
 [![Django](https://img.shields.io/badge/-Django-464646?style=flat-square&logo=Django)](https://www.djangoproject.com/)
@@ -105,4 +105,4 @@ sudo docker-compose up -d --build
     - Проект будет доступен по вашему IP
 
 ## Проект в интернете
-Проект запущен и доступен по [адресу](http://62.84.118.0/recipes)
+Проект запущен и доступен по [адресу](http:)
