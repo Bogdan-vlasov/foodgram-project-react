@@ -66,8 +66,8 @@ jobs:
           script: |
             sudo docker-compose stop
             sudo docker-compose rm web
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram:v1.1
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/frontend:v1.1
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram:latest
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/frontend:latest
             sudo docker-compose up -d
 
   send_message:
