@@ -28,7 +28,7 @@ services:
       dockerfile: ../frontend/Dockerfile
     restart: always
     volumes:
-      - ../frontend/:/app/build/
+      - ../frontend/:/app/result_build/
   
   nginx:
     image: nginx:1.19.3
