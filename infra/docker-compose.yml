@@ -25,7 +25,8 @@ services:
     image: sprngtm4htlr/frontend:1.0
     build:
       context: ../frontend
-      dockerfile: Dockerfile
+      dockerfile: ../frontend/Dockerfile
+    restart: always
     volumes:
       - ../frontend/:/app/build/
   
