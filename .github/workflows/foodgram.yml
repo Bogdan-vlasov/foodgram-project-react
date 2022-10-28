@@ -64,10 +64,11 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
-            sudo docker-compose stop
             sudo docker pull sprngtm4htlr/foodgram:latest
             sudo docker pull sprngtm4htlr/frontend:latest
+            sudo docker-compose rm backend
             sudo docker-compose up -d
+            sudo docker-compose down .
 
   send_message:
     runs-on: ubuntu-latest
