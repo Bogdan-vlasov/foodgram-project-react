@@ -1,3 +1,4 @@
+from django.db.models import Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from rest_framework import status, viewsets
@@ -55,7 +56,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
             return self.add_obj(Cart, request.user, pk)
         elif request.method == 'DELETE':
             return self.delete_obj(Cart, request.user, pk)
-        return None
+        return  Response({
+            'errors': 'Неверный метод'
+        }, status=status.HTTP_400_BAD_REQUEST)
 
     def add_obj(self, model, user, pk):
         if model.objects.filter(user=user, recipe__id=pk).exists():
@@ -83,15 +86,17 @@ class RecipeViewSet(viewsets.ModelViewSet):
             recipe__cart__user=request.user).values_list(
                 'ingredient__name',
                 'ingredient__measurement_unit',
-                'amount')
-        for recipe in ingredients:
-            name, units, amount = recipe
+                'amount').annotate(total_amount=Sum('amount'))
+        for name, (amount, units) in ingredients:
+            name =  ingredients['ingredient__name']
+            units = ingredients['ingredient__measurement_unit']
+            amount = ingredients['total_amount']
             if name in download_dict:
                 new_amount = download_dict[name][0] + amount
                 download_dict[name] = (new_amount, units)
             else:
                 download_dict[name] = (amount, units)
         response = HttpResponse(content_type='.txt')
-        response.write('\n'.join(f'{name} - {value[0]} {value[1]}'
-                       for name, value in download_dict.items()))
+        response.write('\n'.join(f'{name} - {amount} {units}'
+                       for name, (amount, units) in download_dict.items()))
         return response

@@ -68,30 +68,40 @@ class RecipeSerializer(serializers.ModelSerializer):
             return False
         return Recipe.objects.filter(cart__user=user, id=obj.id).exists()
 
-    def validate(self, data):
+    def validate_ingredients(self, data):
         ingredients = self.initial_data.get('ingredients')
+        ingredients_set = set()
         if not ingredients:
-            raise serializers.ValidationError({
-                'ingredients': 'Нужен хоть один ингридиент для рецепта'})
-        ingredient_list = []
-        for ingredient_item in ingredients:
-            ingredient = get_object_or_404(Ingredient,
-                                           id=ingredient_item['id'])
-            if ingredient in ingredient_list:
-                raise serializers.ValidationError('Ингридиенты должны '
-                                                  'быть уникальными')
-            ingredient_list.append(ingredient)
-            if int(ingredient_item['amount']) < 0:
-                raise serializers.ValidationError({
-                    'ingredients': ('Убедитесь, что значение количества '
-                                    'ингредиента больше 0')
-                })
-        data['ingredients'] = ingredients
+            raise serializers.ValidationError(
+                'Добавьте хотя бы один ингредиент')
+        for ingredient in ingredients:
+            if int(ingredient['amount']) < 1:
+                raise serializers.ValidationError(
+                    'Количество ингредиента не может быть меньше 1.')
+            ingredient_id = ingredient.get('id')
+            if ingredient_id in ingredients_set:
+                raise serializers.ValidationError(
+                    'Ингредиент в списке должен быть уникальным.'
+                )
+            ingredients_set.add(ingredient_id)
+        return data
+
+    def validate_tags(self, data):
+        tags_set = set()
+        if not data:
+            raise serializers.ValidationError(
+                'Добавьте хотя бы один тэг')
+        for tag in data:
+            if tag in tags_set:
+                raise serializers.ValidationError(
+                    'Ингредиент в списке должен быть уникальным.'
+                )
+            tags_set.add(tag)
         return data
 
     def create_ingredients(self, ingredients, recipe):
         for ingredient in ingredients:
-            IngredientAmount.objects.create(
+            IngredientAmount.objects.bulk_create(
                 recipe=recipe,
                 ingredient_id=ingredient.get('id'),
                 amount=ingredient.get('amount'),
@@ -116,7 +126,7 @@ class RecipeSerializer(serializers.ModelSerializer):
         instance.tags.clear()
         tags_data = self.initial_data.get('tags')
         instance.tags.set(tags_data)
-        IngredientAmount.objects.filter(recipe=instance).all().delete()
+        IngredientAmount.objects.filter(recipe=instance).delete()
         self.create_ingredients(validated_data.get('ingredients'), instance)
         instance.save()
         return instance

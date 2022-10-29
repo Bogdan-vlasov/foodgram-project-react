@@ -42,16 +42,8 @@ scp docker-compose.yml <username>@<host>:/home/<username>/docker-compose.yml
 scp nginx.conf <username>@<host>:/home/<username>/nginx.conf
 ```
 
-* Cоздайте .env файл и впишите:
-    ```
-    DB_ENGINE=<django.db.backends.postgresql>
-    DB_NAME=<имя базы данных postgres>
-    DB_USER=<пользователь бд>
-    DB_PASSWORD=<пароль>
-    DB_HOST=<db>
-    DB_PORT=<5432>
-    SECRET_KEY=<секретный ключ проекта django>
-    ```
+* Cоздайте .env файл и впишите в него данные из файла infra/.env.example
+
 * Для работы с Workflow добавьте в Secrets GitHub переменные окружения для работы:
     ```
     DB_ENGINE=<django.db.backends.postgresql>
@@ -93,10 +85,9 @@ sudo docker-compose up -d --build
     ```
     sudo docker-compose exec backend python manage.py migrate --noinput
     ```
-    - Загрузите ингридиенты  в базу данных (необязательно):  
-    *Если файл не указывать, по умолчанию выберется ingredients.json*
+    - Загрузите ингридиенты  в базу данных:
     ```
-    sudo docker-compose exec backend python manage.py load_ingredients <Название файла из директории data>
+    sudo docker-compose exec backend python manage.py load_ingredients 
     ```
     - Создать суперпользователя Django:
     ```

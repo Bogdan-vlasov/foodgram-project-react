@@ -45,7 +45,7 @@ class Tag(models.Model):
         verbose_name_plural = 'Теги'
 
     def __str__(self):
-        return self.name
+        return f'{self.name}, {self.slug}'
 
 
 class Recipe(models.Model):
@@ -108,7 +108,8 @@ class IngredientAmount(models.Model):
             models.UniqueConstraint(fields=['ingredient', 'recipe'],
                                     name='unique ingredients recipe')
         ]
-
+    def __str__(self):
+        return f'{self.ingredient} - {self.amount}'
 
 class Favorite(models.Model):
     user = models.ForeignKey(
