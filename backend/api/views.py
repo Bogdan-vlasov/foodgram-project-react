@@ -56,7 +56,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             return self.add_obj(Cart, request.user, pk)
         elif request.method == 'DELETE':
             return self.delete_obj(Cart, request.user, pk)
-        return  Response({
+        return Response({
             'errors': 'Неверный метод'
         }, status=status.HTTP_400_BAD_REQUEST)
 
@@ -88,7 +88,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
                 'ingredient__measurement_unit',
                 'amount').annotate(total_amount=Sum('amount'))
         for name, (amount, units) in ingredients:
-            name =  ingredients['ingredient__name']
+            name = ingredients['ingredient__name']
             units = ingredients['ingredient__measurement_unit']
             amount = ingredients['total_amount']
             if name in download_dict:

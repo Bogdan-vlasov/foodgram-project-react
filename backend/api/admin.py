@@ -11,8 +11,10 @@ class IngredientAdmin(admin.ModelAdmin):
     list_display = ('name', 'measurement_unit')
     list_filter = ('name',)
 
+
 class RecipeIngredientInline(admin.TabularInline):
     model = Recipe.ingredients.through
+
 
 class RecipeAdmin(admin.ModelAdmin):
     list_display = ('name', 'author', 'count_favorites')

@@ -28,5 +28,6 @@ class Follow(models.Model):
                 name='unique follow',
             )
         ]
+
     def __str__(self):
         return f'{self.follower} - {self.following}'

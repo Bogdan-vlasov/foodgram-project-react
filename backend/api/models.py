@@ -108,8 +108,10 @@ class IngredientAmount(models.Model):
             models.UniqueConstraint(fields=['ingredient', 'recipe'],
                                     name='unique ingredients recipe')
         ]
+
     def __str__(self):
         return f'{self.ingredient} - {self.amount}'
+
 
 class Favorite(models.Model):
     user = models.ForeignKey(
