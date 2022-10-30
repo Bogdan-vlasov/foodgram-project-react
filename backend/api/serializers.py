@@ -1,4 +1,4 @@
-from drf_extra_fields.fields import Base64ImageField
+from drf_extra_fields import Base64ImageField
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
@@ -38,7 +38,7 @@ class IngredientAmountSerializer(serializers.ModelSerializer):
 
 
 class RecipeSerializer(serializers.ModelSerializer):
-    image = Base64ImageField(read_only=True)
+    image = Base64ImageField()
     tags = TagSerializer(read_only=True, many=True)
     author = CustomUserSerializer(read_only=True)
     ingredients = IngredientAmountSerializer(
