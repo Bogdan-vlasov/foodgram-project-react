@@ -38,7 +38,7 @@ sudo chmod +x /usr/local/bin/docker-compose
 * Локально отредактируйте файл infra/nginx.conf и в строке server_name впишите свой IP
 * Скопируйте файлы docker-compose.yml и nginx.conf из директории infra на сервер:
 ```
-scp infra/docker-compose.production.yml <username>@<host>:/home/<username>/docker-compose.yml
+scp docker-compose.production.yml <username>@<host>:/home/<username>/docker-compose.yml
 scp nginx.conf <username>@<host>:/home/<username>/nginx.conf
 ```
 
