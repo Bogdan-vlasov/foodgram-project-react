@@ -12,8 +12,6 @@ services:
 
   backend:
     build: ../backend/
-    command: 
-      - ../bakend/python manage.py runserver 0.0.0.0:8000
     image: sprngtm4htlr/foodgram:1.2
     restart: always
     volumes:
