@@ -67,7 +67,7 @@ jobs:
             sudo docker pull sprngtm4htlr/foodgram:1.2
             sudo docker pull sprngtm4htlr/frontend:1.2
             sudo docker-compose rm backend
-            sudo docker-compose up -d
+            docker-compose -t docker-compose.production.yml up -d
             sudo docker-compose down .
 
   send_message:
