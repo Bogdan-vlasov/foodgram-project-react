@@ -12,7 +12,7 @@ services:
 
   backend:
     build: ../backend/
-    image: sprngtm4htlr/foodgram:1.2
+    image: sprngtm4htlr/foodgram:v1.2
     restart: always
     volumes:
       - ./backend:/app 
@@ -24,7 +24,7 @@ services:
       - ./.env
 
   frontend:
-    image: sprngtm4htlr/frontend:1.2
+    image: sprngtm4htlr/frontend:v1.2
     volumes:
       - ../frontend/:/app/result_build/
     depends_on:
