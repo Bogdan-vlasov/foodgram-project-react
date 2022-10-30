@@ -67,7 +67,6 @@ jobs:
             sudo docker pull sprngtm4htlr/foodgram:1.2
             sudo docker pull sprngtm4htlr/frontend:1.2
             sudo docker-compose -f docker-compose.yaml up -d
-            sudo docker-compose down .
 
   send_message:
     runs-on: ubuntu-latest
