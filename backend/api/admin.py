@@ -20,7 +20,7 @@ class RecipeAdmin(admin.ModelAdmin):
     list_display = ('name', 'author', 'count_favorites')
     list_filter = ('author', 'name', 'tags')
     inlines = [RecipeIngredientInline, ]
-    
+
     def count_favorites(self, obj):
         return obj.favorites.count()
 
