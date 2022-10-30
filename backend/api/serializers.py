@@ -80,7 +80,7 @@ class RecipeSerializer(serializers.ModelSerializer):
             ingredient_id = ingredient.get('id')
             if ingredient_id in ingredients_set:
                 raise serializers.ValidationError(
-                    'Ингредиент в списке должен быть уникальным.'
+                    f'Ингредиент {ingredient_id} уже существует'
                 )
             ingredients_set.add(ingredient_id)
         return data
@@ -99,13 +99,16 @@ class RecipeSerializer(serializers.ModelSerializer):
         return data
 
     def create_ingredients(self, ingredients, recipe):
-        for ingredient in ingredients:
             IngredientAmount.objects.bulk_create(
-                recipe=recipe,
-                ingredient_id=ingredient.get('id'),
-                amount=ingredient.get('amount'),
-            )
-
+                [
+                IngredientAmount(
+                    recipe=recipe,
+                    ingredient=ingredient['id'],
+                    amount=ingredient['amount']
+                )
+                for ingredient in ingredients
+            ]
+        )
     def create(self, validated_data):
         image = validated_data.pop('image')
         ingredients_data = validated_data.pop('ingredients')
