@@ -100,4 +100,3 @@ class RecipeViewSet(viewsets.ModelViewSet):
         response.write('\n'.join(f'{name} - {amount} {units}'
                        for name, (amount, units) in download_dict.items()))
         return response
-
