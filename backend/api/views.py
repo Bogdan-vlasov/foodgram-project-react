@@ -86,7 +86,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             recipe__cart__user=request.user).values_list(
                 'ingredient__name',
                 'ingredient__measurement_unit',
-                'amount').annotate(total_amount=Sum('amount'))
+                ).annotate(total_amount=Sum('amount'))
         for name, (amount, units) in ingredients:
             name = ingredients['ingredient__name']
             units = ingredients['ingredient__measurement_unit']
@@ -100,3 +100,4 @@ class RecipeViewSet(viewsets.ModelViewSet):
         response.write('\n'.join(f'{name} - {amount} {units}'
                        for name, (amount, units) in download_dict.items()))
         return response
+
