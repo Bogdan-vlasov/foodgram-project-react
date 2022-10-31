@@ -66,7 +66,12 @@ jobs:
           script: |
             sudo docker pull sprngtm4htlr/foodgram:v1.2
             sudo docker pull sprngtm4htlr/frontend:v1.2
-            sudo docker-compose -f docker-compose.yaml up -d
+            sudo docker-compose down -v
+            sudo docker-compose up -d
+            sudo docker-compose exec backend python manage.py makemigrations --noinput
+            sudo docker-compose exec backend python manage.py migrate --noinput
+            sudo docker-compose exec backend python manage.py load_ingredients 
+            sudo docker-compose exec backend python manage.py collectstatic --noinput
 
   send_message:
     runs-on: ubuntu-latest
