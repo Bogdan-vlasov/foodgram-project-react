@@ -43,7 +43,7 @@ class RecipeSerializer(serializers.ModelSerializer):
     tags = TagSerializer(read_only=True, many=True)
     author = CustomUserSerializer(read_only=True)
     ingredients = IngredientAmountSerializer(
-        source='ingredient_set',
+        source='ingredientamount_set',
         many=True,
         read_only=True,
     )
@@ -68,7 +68,8 @@ class RecipeSerializer(serializers.ModelSerializer):
             return False
         return Recipe.objects.filter(cart__user=user, id=obj.id).exists()
 
-    def validate_ingredients(self, data):
+
+    def validate(self, data):
         ingredients = self.initial_data.get('ingredients')
         if not ingredients:
             raise serializers.ValidationError({
@@ -89,31 +90,17 @@ class RecipeSerializer(serializers.ModelSerializer):
         data['ingredients'] = ingredients
         return data
 
-    def validate_tags(self, data):
-        tags_set = set()
-        if not data:
-            raise serializers.ValidationError(
-                'Добавьте хотя бы один тэг')
-        for tag in data:
-            if tag in tags_set:
-                raise serializers.ValidationError(
-                    'Ингредиент в списке должен быть уникальным.'
-                )
-            tags_set.add(tag)
-        return data
-
     def create_ingredients(self, ingredients, recipe):
         IngredientAmount.objects.bulk_create(
             [
                 IngredientAmount(
                     recipe=recipe,
-                    ingredient=ingredient['ingredient'],
+                    ingredient=ingredient['id'],
                     amount=ingredient['amount']
                 )
                 for ingredient in ingredients
             ]
         )
-        return ingredients
 
     def create(self, validated_data):
         image = validated_data.pop('image')
