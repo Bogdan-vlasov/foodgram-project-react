@@ -68,19 +68,20 @@ class RecipeSerializer(serializers.ModelSerializer):
             return False
         return Recipe.objects.filter(cart__user=user, id=obj.id).exists()
 
+
     def validate(self, data):
         ingredients = self.initial_data.get('ingredients')
         if not ingredients:
             raise serializers.ValidationError({
                 'ingredients': 'Нужен хоть один ингридиент для рецепта'})
-        ingredient_list = set()
+        ingredient_list = []
         for ingredient_item in ingredients:
-            ingredient = get_object_or_404(IngredientAmount,
+            ingredient = get_object_or_404(Ingredient,
                                            id=ingredient_item['id'])
             if ingredient in ingredient_list:
                 raise serializers.ValidationError('Ингридиенты должны '
                                                   'быть уникальными')
-            ingredient_list.add(ingredient)
+            ingredient_list.append(ingredient)
             if int(ingredient_item['amount']) < 0:
                 raise serializers.ValidationError({
                     'ingredients': ('Убедитесь, что значение количества '
@@ -90,16 +91,12 @@ class RecipeSerializer(serializers.ModelSerializer):
         return data
 
     def create_ingredients(self, ingredients, recipe):
-        IngredientAmount.objects.bulk_create(
-            [
-                IngredientAmount(
-                    recipe=recipe,
-                    ingredient=ingredient['id'],
-                    amount=ingredient['amount']
-                )
-                for ingredient in ingredients
-            ]
-        )
+        for ingredient in ingredients:
+            IngredientAmount.objects.create(
+                recipe=recipe,
+                ingredient_id=ingredient.get('id'),
+                amount=ingredient.get('amount'),
+            )
 
     def create(self, validated_data):
         image = validated_data.pop('image')
@@ -120,7 +117,7 @@ class RecipeSerializer(serializers.ModelSerializer):
         instance.tags.clear()
         tags_data = self.initial_data.get('tags')
         instance.tags.set(tags_data)
-        IngredientAmount.objects.filter(recipe=instance).delete()
+        IngredientAmount.objects.filter(recipe=instance).all().delete()
         self.create_ingredients(validated_data.get('ingredients'), instance)
         instance.save()
         return instance
