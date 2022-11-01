@@ -86,15 +86,15 @@ class RecipeViewSet(viewsets.ModelViewSet):
             recipe__cart__user=request.user).values_list(
                 'ingredient__name',
                 'ingredient__measurement_unit',
-                ).annotate(total_amount=Sum('amount'))
+        ).annotate(total_amount=Sum('amount'))
         for recipe in ingredients:
-            name, units, amount = recipe 
-            if name in download_dict: 
-                new_amount = download_dict[name][0] + amount 
-                download_dict[name] = (new_amount, units) 
-            else: 
-                download_dict[name] = (amount, units) 
-        response = HttpResponse(content_type='.txt') 
-        response.write('\n'.join(f'{name} - {value[0]} {value[1]}' 
-                       for name, value in download_dict.items())) 
-        return response 
+            name, units, amount = recipe
+            if name in download_dict:
+                new_amount = download_dict[name][0] + amount
+                download_dict[name] = (new_amount, units)
+            else:
+                download_dict[name] = (amount, units)
+        response = HttpResponse(content_type='.txt')
+        response.write('\n'.join(f'{name} - {value[0]} {value[1]}'
+                       for name, value in download_dict.items()))
+        return response
