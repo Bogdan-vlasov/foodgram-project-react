@@ -77,12 +77,12 @@ class RecipeSerializer(serializers.ModelSerializer):
             if int(ingredient['amount']) < 1:
                 raise serializers.ValidationError(
                     'Количество ингредиента не может быть меньше 1.')
-            ingredient_id = ingredient.get('id')
-            if ingredient_id in ingredients_set:
+            ingredient = ingredient.get('ingredient')
+            if ingredient in ingredients_set:
                 raise serializers.ValidationError(
-                    f'Ингредиент {ingredient_id} уже существует'
+                    f'Ингредиент {ingredient} уже существует'
                 )
-            ingredients_set.add(ingredient_id)
+            ingredients_set.add(ingredient)
         return data
 
     def validate_tags(self, data):
