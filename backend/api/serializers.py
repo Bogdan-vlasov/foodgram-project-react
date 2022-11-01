@@ -99,15 +99,11 @@ class RecipeSerializer(serializers.ModelSerializer):
         return data
 
     def create_ingredients(self, ingredients, recipe):
-        IngredientAmount.objects.create( 
-
-                recipe=recipe, 
-
-                ingredient_id=ingredients.get('id'), 
-
-                amount=ingredients.get('amount'), 
-
-            ) 
+        IngredientAmount.objects.create(
+            recipe=recipe,
+            ingredient_id=ingredients.get('id'),
+            amount=ingredients.get('amount'),
+        )
 
     def create(self, validated_data):
         image = validated_data.pop('image')
