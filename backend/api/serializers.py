@@ -77,7 +77,7 @@ class RecipeSerializer(serializers.ModelSerializer):
             if int(ingredient['amount']) < 1:
                 raise serializers.ValidationError(
                     'Количество ингредиента не может быть меньше 1.')
-            ingredient = data['ingredient']
+            ingredient = ingredient.get('ingredient')
             if ingredient in ingredients_set:
                 raise serializers.ValidationError(
                     f'Ингредиент {ingredient} уже существует'
@@ -99,11 +99,17 @@ class RecipeSerializer(serializers.ModelSerializer):
         return data
 
     def create_ingredients(self, ingredients, recipe):
-        IngredientAmount.objects.create(
-            recipe=recipe,
-            ingredient_id=ingredients.get('id'),
-            amount=ingredients.get('amount'),
+        IngredientAmount.objects.bulk_create(
+            [
+                IngredientAmount(
+                    recipe=recipe,
+                    ingredient=ingredient['ingredient'],
+                    amount=ingredient['amount']
+                )
+                for ingredient in ingredients
+            ]
         )
+        return recipe
 
     def create(self, validated_data):
         image = validated_data.pop('image')
