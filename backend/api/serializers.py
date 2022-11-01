@@ -109,7 +109,7 @@ class RecipeSerializer(serializers.ModelSerializer):
                 for ingredient in ingredients
             ]
         )
-        return recipe
+        return ingredients
 
     def create(self, validated_data):
         image = validated_data.pop('image')
