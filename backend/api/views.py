@@ -87,16 +87,14 @@ class RecipeViewSet(viewsets.ModelViewSet):
                 'ingredient__name',
                 'ingredient__measurement_unit',
                 ).annotate(total_amount=Sum('amount'))
-        for name, (amount, units) in ingredients:
-            name = ingredients['ingredient__name']
-            units = ingredients['ingredient__measurement_unit']
-            amount = ingredients['total_amount']
-            if name in download_dict:
-                new_amount = download_dict[name][0] + amount
-                download_dict[name] = (new_amount, units)
-            else:
-                download_dict[name] = (amount, units)
-        response = HttpResponse(content_type='.txt')
-        response.write('\n'.join(f'{name} - {amount} {units}'
-                       for name, (amount, units) in download_dict.items()))
-        return response
+        for recipe in ingredients:
+            name, units, amount = recipe 
+            if name in download_dict: 
+                new_amount = download_dict[name][0] + amount 
+                download_dict[name] = (new_amount, units) 
+            else: 
+                download_dict[name] = (amount, units) 
+        response = HttpResponse(content_type='.txt') 
+        response.write('\n'.join(f'{name} - {value[0]} {value[1]}' 
+                       for name, value in download_dict.items())) 
+        return response 
