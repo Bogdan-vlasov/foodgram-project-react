@@ -30,7 +30,7 @@ class Tag(models.Model):
     PURPLE = '#8775D2'
 
     MEAL = [
-        (RED, 'К'),
+        (RED, 'Красный'),
         (GREEN, 'Зеленый'),
         (PURPLE, 'Фиолетовый')
     ]
